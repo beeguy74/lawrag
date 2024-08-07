@@ -7,6 +7,9 @@ from pathlib import Path
 from llama_index.core import VectorStoreIndex
 from llama_index.core import Settings
 from llama_index.readers.file import PandasCSVReader
+from time import sleep, localtime, strftime
+
+
 
 
 load_dotenv()
@@ -33,13 +36,24 @@ documents = reader.load_data(file = path)
 Settings.llm=llm
 Settings.embed_model=embed_model
 
-index = VectorStoreIndex.from_documents(
-    documents=documents,
-    show_progress=True,
-)
+print("Number of documents ", len(documents))
+if len(documents) < 50:
+    index = VectorStoreIndex.from_documents(
+        documents=documents,
+        show_progress=True,
+    )
+else:
+    start = 60
+    index = VectorStoreIndex.from_documents(
+        documents=documents[:start],
+        show_progress=True,
+    )
+    for i in range(start, len(documents), start - 1):
+        chunk = documents[i:i + start - 1]
+        out = index.refresh(chunk)
+        print(i, out)
+        sleep(4)
 
-persist_dir_name = Path("./storage_" + path.name)
-if persist_dir_name.exists():
-    persist_dir_name = Path("./storage_" + path.name + "_1")
+persist_dir_name = Path("./storage_" + path.name + strftime("%Y-%m-%d_%H-%M-%S", localtime()))
 index.storage_context.persist(persist_dir_name)
 print("Index saved in ", persist_dir_name)
