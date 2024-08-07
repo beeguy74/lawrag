@@ -23,7 +23,8 @@ def search(index: VectorStoreIndex, query, rerank):
     print(response)
     for i, node in enumerate(response.source_nodes):
         print(f">>> Source node [{i}] :")
-        print(* node.get_text().split("\n"))
+        for j in node.get_text().split("\n"):
+            print(">>> ", j)
 
 
 if __name__ == '__main__':

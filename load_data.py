@@ -10,8 +10,6 @@ from llama_index.readers.file import PandasCSVReader
 from time import sleep, localtime, strftime
 
 
-
-
 load_dotenv()
 if (len(argv) < 2):
     print("Provide a path to data to load")
@@ -29,7 +27,7 @@ if llm is None or embed_model is None:
     exit(1)
 
 # CSVReader does not work properly, so i use PandasCSVReader
-reader = PandasCSVReader(concat_rows=False)
+reader = PandasCSVReader()
 print("Loading data from ", path)
 documents = reader.load_data(file = path)
 
