@@ -64,10 +64,10 @@ class MyPandasCSVReader(BaseReader):
         #renama column path_title to document_title
         df.rename(columns={"path_title": "document_title"}, inplace=True)
         # i put only the text column in the text list
-        text_list = df["text"].tolist()
+        text_list = df["texte"].tolist()
 
         #and other columns in the metadata_list
-        metadata_list = df.drop(columns=["text", "embedding"]).to_dict(orient="records")
+        metadata_list = df.drop(columns=["texte", "embedding"]).to_dict(orient="records")
 
         # text_list = df.apply(
         #     lambda row: (self._col_joiner).join(row.astype(str).tolist()), axis=1

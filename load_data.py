@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 from dotenv import load_dotenv
-from init import init_models
+from modules.init import init_models
 from sys import argv
 from pathlib import Path
 from llama_index.core import VectorStoreIndex
@@ -16,7 +16,7 @@ from llama_index.core.extractors import (
     KeywordExtractor,
 )
 from llama_index.core.ingestion import IngestionPipeline
-from MyPandasCSVReader import MyPandasCSVReader
+from modules.MyPandasCSVReader import MyPandasCSVReader
 
 
 load_dotenv()

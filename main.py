@@ -1,7 +1,7 @@
 from dotenv import load_dotenv
 from sys import argv
 from pathlib import Path
-from init import init_models
+from modules.init import init_models
 from llama_index.postprocessor.cohere_rerank import CohereRerank
 from llama_index.core import load_index_from_storage, StorageContext, Settings, VectorStoreIndex
 
