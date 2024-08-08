@@ -25,7 +25,7 @@ To get started with this project, follow the steps below:
 To load the CSV table as the data source, run the following command and provide path to file.csv:
 
 ```bash
-python load_data.py data/file.csv
+python load_data.py data/extrait_travail.csv
 ```
 
 This script will parse the CSV file and populate the search engine with the relevant data.
