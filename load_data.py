@@ -6,7 +6,7 @@ from sys import argv
 from pathlib import Path
 from llama_index.core import VectorStoreIndex
 from llama_index.core import Settings
-from llama_index.readers.file import PagedCSVReader
+from llama_index.readers.file import PagedCSVReader, PandasCSVReader
 from time import sleep, localtime, strftime
 from llama_index.core.ingestion import IngestionPipeline
 from llama_index.core.node_parser import SentenceSplitter
@@ -18,22 +18,11 @@ from llama_index.core.extractors import (
 )
 from llama_index.core.ingestion import IngestionPipeline
 from llama_index.core.schema import Document
+from MyPandasCSVReader import MyPandasCSVReader
 import re
 
 from typing import List
 
-def parse_metadata(documents: List[Document]):
-    for doc in documents:
-        # in document["text"] we have "article_id: LEGIARTI000006900781\nsource_id: LEGITEXT000006072050\narticle_num: L1111-1
-        # we can extract the article_id until the first \n
-        article_id_regex = r"article_id: ([^\n]+)"
-        source_id_regex = r"source_id: ([^\n]+)"
-        article_num_regex = r"article_num: ([^\n]+)"
-        # now using regex we add extracted metadata to the document
-        doc.metadata["article_id"] = re.search(article_id_regex, doc.text).group(1)
-        doc.metadata["source_id"] = re.search(source_id_regex, doc.text).group(1)
-        doc.metadata["article_num"] = re.search(article_num_regex, doc.text).group(1)
-    return documents
 
 load_dotenv()
 if (len(argv) < 2):
@@ -51,24 +40,23 @@ if llm is None or embed_model is None:
     print("Error while initializing the models")
     exit(1)
 
-# CSVReader does not work properly, so i use PandasCSVReader
-reader = PagedCSVReader()
+# PandasCSVReader uses pandas.read_csv() to load data from a CSV file
+reader = MyPandasCSVReader(
+    concat_rows=False,
+)
 print("Loading data from ", path)
 documents = reader.load_data(file = path)
-documents = parse_metadata(documents)
-for i, doc in enumerate(documents):
-    print(f"Document {i} : {doc.metadata}")
-    print("\n")
+print("Number of documents loaded: ", len(documents))
 
 Settings.llm=llm
 Settings.embed_model=embed_model
 
 transformations = [
     SentenceSplitter(),
-    TitleExtractor(nodes=5),
+    # TitleExtractor(nodes=5),
     # QuestionsAnsweredExtractor(questions=3),
     # SummaryExtractor(summaries=["prev", "self"]),
-    KeywordExtractor(keywords=10),
+    # KeywordExtractor(keywords=10),
     # EntityExtractor(prediction_threshold=0.5),
 ]
 

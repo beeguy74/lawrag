@@ -11,12 +11,19 @@ def search(index: VectorStoreIndex, query, rerank):
         postprocessors=[rerank],
     )
 
-    # retriever = index.as_retriever(
-    #     postprocessors=[rerank],
-    # )
-    # print(">>> Documents:")
-    # results = retriever.retrieve(query)
-    # print(results)
+    retriever = index.as_retriever(
+        postprocessors=[rerank],
+    )
+    print(">>> Documents:")
+    results = retriever.retrieve(query)
+    for i, doc in enumerate(results):
+        print(f">>> Document [{i}] :")
+        print(
+            "article_id: ", doc.metadata.get("article_id"),
+            "article_num: ", doc.metadata.get("article_num"),
+        )
+        print(doc.get_text())
+        print("\n")
 
     print("\n>>> Answer:")
     response = query_engine.query(query)
