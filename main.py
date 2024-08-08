@@ -45,9 +45,10 @@ if __name__ == '__main__':
         print("Storage does not exist")
         exit(1)
 
-    llm, embed_model = init_models("cohere/command-r", "embed-multilingual-light-v3.0")
+    llm, embed_model = init_models("cohere/command-r", "OrdalieTech/Solon-embeddings-large-0.1", local=True)
     Settings.llm=llm
     Settings.embed_model=embed_model
+    Settings.chunk_size=2048
 
     # node postprocessors are most commonly applied within a query engine,
     # after the node retrieval step and before the response synthesis step.

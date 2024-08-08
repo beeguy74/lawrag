@@ -29,7 +29,7 @@ if (not path.exists()):
     print("File does not exist")
     exit(1)
 
-llm, embed_model = init_models("cohere/command-r", "embed-multilingual-light-v3.0")
+llm, embed_model = init_models("cohere/command-r", "OrdalieTech/Solon-embeddings-large-0.1", local=True)
 
 if llm is None or embed_model is None:
     print("Error while initializing the models")
@@ -45,9 +45,10 @@ print("Number of documents loaded: ", len(documents))
 
 Settings.llm=llm
 Settings.embed_model=embed_model
+Settings.chunk_size=2048
 
 transformations = [
-    SentenceSplitter(),
+    SentenceSplitter(chunk_size=Settings.chunk_size),
     # TitleExtractor(nodes=5),
     # QuestionsAnsweredExtractor(questions=3),
     # SummaryExtractor(summaries=["prev", "self"]),
@@ -57,7 +58,7 @@ transformations = [
 
 pipeline = IngestionPipeline(
     transformations=transformations
-    
+
 )
 
 nodes = pipeline.run(documents=documents)
@@ -72,7 +73,7 @@ for i, node in enumerate(nodes):
 
 
 print("Number of documents ", len(documents))
-index = VectorStoreIndex(nodes=nodes)
+index = VectorStoreIndex(nodes=nodes, show_progress=True)
 
 persist_dir_name = Path("./storage_" + path.name + strftime("%Y-%m-%d_%H-%M-%S", localtime()))
 index.storage_context.persist(persist_dir_name)
