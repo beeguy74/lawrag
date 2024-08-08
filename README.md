@@ -13,10 +13,12 @@ To get started with this project, follow the steps below:
 4. Run the `load_data.py` script to load the CSV table as the data source.
 5. Execute the `main.py` script to start querying the system.
 
-1. Clone the repository to your local machine.
-2. Install the required dependencies by running `pip install -r requirements.txt`.
-3. Run the `load_data.py` script to load the CSV table as the data source.
-4. Execute the `main.py` script to start querying the system.
+It was written for linux, and if you use MacOS, you have to delete following libraries from requirements.txt
+- torch
+- torchaudio
+- torchvision
+- debugpy
+and then install them with pip
 
 ## Usage
 
