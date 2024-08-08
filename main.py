@@ -4,34 +4,48 @@ from pathlib import Path
 from modules.init import init_models
 from llama_index.postprocessor.cohere_rerank import CohereRerank
 from llama_index.core import load_index_from_storage, StorageContext, Settings, VectorStoreIndex
+import re
 
 
 def search(index: VectorStoreIndex, query, rerank):
+    """
+    Search for a query in the index and print the results, 
+    You should provide index storage, query, and a postprocessor to rerank the results
+    """
     query_engine = index.as_query_engine(
-        postprocessors=[rerank],
+        similarity_top_k=10,
+        node_postprocessors=[rerank],
     )
 
-    retriever = index.as_retriever(
-        postprocessors=[rerank],
-    )
-    print(">>> Documents:")
-    results = retriever.retrieve(query)
-    for i, doc in enumerate(results):
-        print(f">>> Document [{i}] :")
-        print(
-            "article_id: ", doc.metadata.get("article_id"),
-            "article_num: ", doc.metadata.get("article_num"),
-        )
-        print(doc.get_text())
-        print("\n")
+    # retriever = index.as_retriever(
+    #     postprocessors=[rerank],
+    # )
+    # print(">>> Documents:")
+    # results = retriever.retrieve(query)
+    # for i, doc in enumerate(results):
+    #     print(f">>> Document [{i}] :")
+    #     print(
+    #         "article_id: ", doc.metadata.get("article_id"),
+    #         "article_num: ", doc.metadata.get("article_num"),
+    #     )
+    #     print(doc.get_text())
+    #     print("\n")
 
     print("\n>>> Answer:")
-    response = query_engine.query(query)
+    response = query_engine.query(
+        query
+        )
     print(response)
     for i, node in enumerate(response.source_nodes):
-        print(f">>> Source node [{i}] :")
+        # print >>> Source in red color
+        print("\033[91m>>> Source: \033[0m")
+        print(f"    article_id: {node.metadata["article_id"]}")
+        print(f"    article_num: {node.metadata["article_num"]}")
         for j in node.get_text().split("\n"):
-            print(">>> ", j)
+            #delete all html tags from text
+            clean_text = re.sub('<[^<]+?>', '', j)
+            print(">>> Text: ", clean_text)
+    print(">>> Documents:")
 
 
 if __name__ == '__main__':
