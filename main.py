@@ -49,6 +49,8 @@ if __name__ == '__main__':
     Settings.llm=llm
     Settings.embed_model=embed_model
 
+    # node postprocessors are most commonly applied within a query engine,
+    # after the node retrieval step and before the response synthesis step.
     cohere_rerank = CohereRerank()
 
     storage_context = StorageContext.from_defaults(

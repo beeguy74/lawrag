@@ -6,7 +6,6 @@ from sys import argv
 from pathlib import Path
 from llama_index.core import VectorStoreIndex
 from llama_index.core import Settings
-from llama_index.readers.file import PagedCSVReader, PandasCSVReader
 from time import sleep, localtime, strftime
 from llama_index.core.ingestion import IngestionPipeline
 from llama_index.core.node_parser import SentenceSplitter
@@ -17,11 +16,7 @@ from llama_index.core.extractors import (
     KeywordExtractor,
 )
 from llama_index.core.ingestion import IngestionPipeline
-from llama_index.core.schema import Document
 from MyPandasCSVReader import MyPandasCSVReader
-import re
-
-from typing import List
 
 
 load_dotenv()
@@ -60,7 +55,10 @@ transformations = [
     # EntityExtractor(prediction_threshold=0.5),
 ]
 
-pipeline = IngestionPipeline(transformations=transformations)
+pipeline = IngestionPipeline(
+    transformations=transformations
+    
+)
 
 nodes = pipeline.run(documents=documents)
 
@@ -74,22 +72,6 @@ for i, node in enumerate(nodes):
 
 
 print("Number of documents ", len(documents))
-# if len(documents) < 50:
-#     index = VectorStoreIndex.from_documents(
-#         documents=documents,
-#         show_progress=True,
-#     )
-# else:
-#     start = 60
-#     index = VectorStoreIndex.from_documents(
-#         documents=documents[:start],
-#         show_progress=True,
-#     )
-#     for i in range(start, len(documents), start - 1):
-#         chunk = documents[i:i + start - 1]
-#         out = index.refresh(chunk)
-#         print(i, out)
-#         sleep(4)
 index = VectorStoreIndex(nodes=nodes)
 
 persist_dir_name = Path("./storage_" + path.name + strftime("%Y-%m-%d_%H-%M-%S", localtime()))
