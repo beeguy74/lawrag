@@ -5,6 +5,13 @@ This project is a search engine for the French Labor Code. It provides two entry
 ## Getting Started
 
 To get started with this project, follow the steps below:
+To get started with this project, follow the steps below:
+
+1. Clone the repository to your local machine.
+2. Install the required dependencies by running `pip install -r requirements.txt`.
+3. Rename the `.env-example` file to `.env` and provide the necessary environment variables.
+4. Run the `load_data.py` script to load the CSV table as the data source.
+5. Execute the `main.py` script to start querying the system.
 
 1. Clone the repository to your local machine.
 2. Install the required dependencies by running `pip install -r requirements.txt`.
