@@ -13,23 +13,6 @@ class MyPandasCSVReader(BaseReader):
     Parses CSVs using the separator detection from Pandas `read_csv`function.
     If special parameters are required, use the `pandas_config` dict.
 
-    Args:
-        concat_rows (bool): whether to concatenate all rows into one document.
-            If set to False, a Document will be created for each row.
-            True by default.
-
-        col_joiner (str): Separator to use for joining cols per row.
-            Set to ", " by default.
-
-        row_joiner (str): Separator to use for joining each row.
-            Only used when `concat_rows=True`.
-            Set to "\n" by default.
-
-        pandas_config (dict): Options for the `pandas.read_csv` function call.
-            Refer to https://pandas.pydata.org/docs/reference/api/pandas.read_csv.html
-            for more information.
-            Set to empty dict by default, this means pandas will try to figure
-            out the separators, table head, etc. on its own.
 
     """
 

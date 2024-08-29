@@ -9,7 +9,7 @@ from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 
 def init_models(llm_name, embeddings_model_name, local) -> Tuple[OpenRouter, CohereEmbedding]:
     """
-    Initialize the llm and the embeddings, and return them
+    Initialize the llm and the embedding models, and return them
     """
     llm = None
     embed_model = None

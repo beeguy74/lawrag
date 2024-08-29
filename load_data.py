@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+# this script loads data from a CSV file and creates an vector index using embedding model
+
 from dotenv import load_dotenv
 from modules.init import init_models
 from sys import argv
