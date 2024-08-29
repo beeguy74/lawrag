@@ -19,6 +19,7 @@ from llama_index.core.extractors import (
 )
 from llama_index.core.ingestion import IngestionPipeline
 from modules.MyPandasCSVReader import MyPandasCSVReader
+from modules.MyXMLReader import MyXMLReader
 
 
 load_dotenv()
@@ -31,16 +32,31 @@ if (not path.exists()):
     print("File does not exist")
     exit(1)
 
+reader = None
+# check the extension of file - is it csv, xml or smth else
+if path.suffix == ".csv":
+    # PandasCSVReader uses pandas.read_csv() to load data from a CSV file
+    reader = MyPandasCSVReader(
+        concat_rows=False,
+    )
+elif path.suffix == ".xml":
+    # MyXMLReader uses pandas.read_csv() to load data from an XML file
+    reader = MyXMLReader(
+        concat_rows=False,
+    )
+else:
+    print("Unsupported file format, provide a CSV or XML file")
+    exit(1)
+
+# docs = reader.load_data(file = path)
+
+
 llm, embed_model = init_models("cohere/command-r", "OrdalieTech/Solon-embeddings-large-0.1", local=True)
 
 if llm is None or embed_model is None:
     print("Error while initializing the models")
     exit(1)
 
-# PandasCSVReader uses pandas.read_csv() to load data from a CSV file
-reader = MyPandasCSVReader(
-    concat_rows=False,
-)
 print("Loading data from ", path)
 documents = reader.load_data(file = path)
 print("Number of documents loaded: ", len(documents))
